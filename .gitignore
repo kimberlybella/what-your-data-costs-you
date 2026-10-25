@@ -1,0 +1,9 @@
+# Generated convenience copy — model.js inlined so the page opens from a
+# double-click without a server. Regenerated, never edited by hand, and
+# never deployed. See README.md.
+preview.html
+
+# Superseded; the exec bit does not survive the folder mount.
+_preview.command.unused
+
+.DS_Store

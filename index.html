@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Your Data Costs You</title>
+<meta name="description" content="Fifteen questions about how you shop, then the willingness-to-pay score a pricing system would build about you — and an estimate of what it costs you in a year.">
+
+<!-- Replace REPLACE_WITH_DOMAIN once the domain is registered. -->
+<meta property="og:title" content="What Your Data Costs You">
+<meta property="og:description" content="Answer fifteen questions about how you shop and see the willingness-to-pay score a pricing system would build about you — and what it is estimated to cost.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://REPLACE_WITH_DOMAIN/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/* Self-hosted webfonts — CURRENTLY DISABLED.
+   The .woff2 files are not in fonts/ yet, so these rules were requesting seven
+   files that do not exist: seven 404s on every page load, which looks careless
+   on a page that promises it does nothing extra.
+
+   TO ENABLE: drop the files into fonts/ (names in fonts/README.txt), then
+   delete the two comment markers around the block below.
+
+   Until then the stacks fall back to Georgia and the system sans/mono, which
+   is why nothing looks broken without them.
+
+-- remove this line to enable --
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Sans";src:url("fonts/plex-sans-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Sans";src:url("fonts/plex-sans-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Sans";src:url("fonts/plex-sans-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/plex-mono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/plex-mono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+-- and this line too --
+*/
+
+:root{
+  color-scheme: light;
+  --ground:#f4f6f8; --surface:#ffffff; --surface-2:#eef1f5; --surface-inset:#e9edf2;
+  --ink:#12161d; --ink-2:#525a68; --ink-3:#858d9b; --rule:#dde2e9; --rule-2:#c8cfd9;
+  --accent:#2f56b5; --accent-soft:#e8edf9; --accent-ink:#ffffff;
+  --ref:#a8701a; --ref-soft:#f5ead8;
+  --s1:#c5d9f2; --s2:#94b8e6; --s3:#5f92d6; --s4:#3a6cbd; --s5:#23478f;
+  --shadow:0 1px 2px rgba(18,22,29,.05),0 4px 14px rgba(18,22,29,.045);
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  color-scheme: dark;
+  --ground:#0e1116; --surface:#161b23; --surface-2:#1c222c; --surface-inset:#11151c;
+  --ink:#eef1f6; --ink-2:#a3adbc; --ink-3:#6e7889; --rule:#262d38; --rule-2:#39424f;
+  --accent:#7ba1ee; --accent-soft:#1b2436; --accent-ink:#0e1116;
+  --ref:#d3a054; --ref-soft:#2a2317;
+  --s1:#2f4a70; --s2:#3d69a8; --s3:#5590d4; --s4:#79aee6; --s5:#a5cbf2;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#0e1116; --surface:#161b23; --surface-2:#1c222c; --surface-inset:#11151c;
+  --ink:#eef1f6; --ink-2:#a3adbc; --ink-3:#6e7889; --rule:#262d38; --rule-2:#39424f;
+  --accent:#7ba1ee; --accent-soft:#1b2436; --accent-ink:#0e1116;
+  --ref:#d3a054; --ref-soft:#2a2317;
+  --s1:#2f4a70; --s2:#3d69a8; --s3:#5590d4; --s4:#79aee6; --s5:#a5cbf2;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding:30px 22px 80px}
+.wide{max-width:980px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+h1{font-family:var(--serif);font-weight:500;font-size:44px;line-height:1.1;letter-spacing:-.018em;margin:0 0 14px;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:500;font-size:26px;line-height:1.2;letter-spacing:-.012em;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.02em;margin:0 0 4px}
+p{margin:0 0 14px}
+.lede{color:var(--ink-2);font-size:17px;max-width:60ch}
+.sub{color:var(--ink-2);font-size:13.5px;margin:0 0 18px;max-width:72ch}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:26px;box-shadow:var(--shadow)}
+.stack{display:flex;flex-direction:column;gap:18px}
+[hidden]{display:none!important}
+code{font-family:var(--mono);font-size:.9em;background:var(--surface-inset);padding:1px 5px;border-radius:4px}
+
+button.act{appearance:none;font-family:var(--sans);font-size:14px;font-weight:500;padding:10px 20px;border-radius:8px;border:1px solid var(--rule-2);background:var(--surface);color:var(--ink);cursor:pointer}
+button.act:hover{border-color:var(--ink-3)}
+button.act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.act.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.act.big{font-size:15.5px;padding:13px 28px}
+button.act[disabled]{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* register toggle */
+.reg{display:inline-flex;gap:2px;background:var(--surface-2);padding:3px;border-radius:9px;border:1px solid var(--rule)}
+.reg button{appearance:none;border:0;background:transparent;font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--ink-2);padding:6px 13px;border-radius:7px;cursor:pointer}
+.reg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(18,22,29,.08)}
+.reg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* privacy strip */
+.priv{display:flex;gap:11px;align-items:flex-start;padding:14px 17px;background:var(--surface-2);border:1px solid var(--rule);border-radius:10px;font-size:13.5px;color:var(--ink-2);margin:22px 0}
+.priv .ic{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--accent);flex:none;padding-top:2px}
+.priv strong{color:var(--ink);font-weight:600}
+
+/* progress */
+.prog{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.ptrack{flex:1;height:4px;background:var(--surface-inset);border-radius:2px;overflow:hidden}
+.ptrack i{display:block;height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
+.pnum{font-family:var(--mono);font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* question */
+.qdim{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.qtext{font-family:var(--serif);font-weight:500;font-size:29px;line-height:1.22;letter-spacing:-.012em;margin:0 0 24px;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{appearance:none;text-align:left;font-family:var(--sans);font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--rule-2);border-radius:9px;padding:14px 17px;cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--ink-3);background:var(--surface-2)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+
+/* reveal card */
+.reveal{background:var(--ink);color:var(--ground);border-radius:12px;padding:34px 30px}
+.reveal .rk{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin-bottom:14px}
+.reveal .rt{font-family:var(--serif);font-size:27px;line-height:1.28;margin:0 0 14px;text-wrap:balance}
+.reveal .rb{font-size:14.5px;opacity:.82;margin:0 0 6px;max-width:60ch}
+.reveal .rc{font-family:var(--mono);font-size:11.5px;opacity:.55;margin-top:16px}
+
+/* calibration */
+.field{margin-bottom:22px}
+.flab{font-size:14px;font-weight:500;margin-bottom:9px;display:block}
+.fhelp{font-size:12.5px;color:var(--ink-3);margin:-5px 0 9px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{appearance:none;font-family:var(--sans);font-size:13.5px;padding:8px 14px;border-radius:20px;border:1px solid var(--rule-2);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.srow{display:grid;grid-template-columns:1fr 52px;gap:14px;align-items:center;margin-bottom:13px}
+.srow label{font-size:13.5px;color:var(--ink-2)}
+.srow .sv{font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums;text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent)}
+textarea{width:100%;font-family:var(--sans);font-size:14.5px;line-height:1.5;color:var(--ink);background:var(--surface);border:1px solid var(--rule-2);border-radius:9px;padding:12px 14px;resize:vertical}
+textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+textarea::placeholder{color:var(--ink-3)}
+
+/* glossary */
+.glw{position:relative;display:inline}
+button.gl{appearance:none;border:0;background:none;padding:0;margin:0;color:inherit;cursor:help;
+  /* display:inline so a term wraps across lines like the text around it;
+     the individual font properties are inherited rather than the `font`
+     shorthand, which resets family and weight to the browser's button defaults */
+  display:inline;font-family:inherit;font-size:inherit;font-weight:inherit;
+  font-style:inherit;line-height:inherit;letter-spacing:inherit;text-align:inherit;
+  text-decoration:underline dotted;text-decoration-thickness:1px;
+  text-decoration-color:var(--ink-3);text-underline-offset:3px}
+button.gl:hover{text-decoration-color:var(--accent);color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.gltip{position:absolute;left:0;top:calc(100% + 8px);z-index:40;width:min(19rem,78vw);
+  background:var(--ink);color:var(--ground);font-family:var(--sans);font-size:13px;line-height:1.5;
+  font-weight:400;padding:11px 14px;border-radius:9px;box-shadow:0 6px 22px rgba(18,22,29,.3);
+  opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none;text-align:left}
+.gltip b{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;opacity:.6;margin-bottom:5px;font-weight:600}
+.glw:hover .gltip,.glw:focus-within .gltip,.glw.open .gltip{opacity:1;visibility:visible}
+@media(max-width:620px){.gltip{left:auto;right:0}}
+
+/* results hero */
+.hero{text-align:center;padding:46px 26px 40px}
+.hero .hk{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
+.hero .hv{font-family:var(--mono);font-weight:500;font-size:clamp(38px,8.5vw,64px);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.hero .hs{font-family:var(--serif);font-size:19px;color:var(--ink-2);margin:18px auto 0;max-width:34ch;line-height:1.4}
+.hero .hc{font-size:13px;color:var(--ink-3);margin-top:22px;font-family:var(--mono)}
+.caveat{display:flex;gap:11px;align-items:flex-start;background:var(--ref-soft);border:1px solid var(--ref);border-radius:9px;padding:14px 17px;font-size:13.5px;color:var(--ink-2);margin-top:22px}
+.caveat strong{color:var(--ink)}
+.caveat .ic{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--ref);flex:none;padding-top:2px}
+
+/* score */
+.scorehead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.scorenum{font-family:var(--mono);font-size:40px;font-weight:500;line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.scoreband{font-family:var(--sans);font-size:15px;font-weight:600;padding:5px 13px;border-radius:20px;background:var(--accent-soft);color:var(--accent)}
+.scalebar{position:relative;height:9px;background:linear-gradient(90deg,var(--s1),var(--s2),var(--s3),var(--s4),var(--s5));border-radius:5px;margin:38px 0 8px}
+.scalebar .you{position:absolute;top:-6px;width:3px;height:21px;background:var(--ink);border-radius:2px;transform:translateX(-50%)}
+.scalebar .base{position:absolute;top:-4px;width:0;height:17px;border-left:1.5px dashed var(--ref);transform:translateX(-50%)}
+.scalebar .youlab{position:absolute;bottom:calc(100% + 11px);transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.scalelabs{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.dims{display:flex;flex-direction:column;gap:7px;margin-top:22px}
+.drow{display:grid;grid-template-columns:186px 1fr 40px;gap:13px;align-items:center}
+.drow .dl{font-size:13px;color:var(--ink-2);text-align:right;line-height:1.25}
+.dtrack{background:var(--surface-inset);border-radius:4px;height:19px;overflow:hidden}
+.dfill{height:100%;border-radius:0 4px 4px 0;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.drow .dv{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+
+/* inference cards */
+.infs{display:flex;flex-direction:column;gap:13px;margin-top:6px}
+.inf{border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 9px 9px 0;padding:17px 20px}
+.inf .it{font-family:var(--serif);font-size:20px;line-height:1.28;margin:0 0 8px;text-wrap:balance}
+.inf .ib{font-size:13.5px;color:var(--ink-2);margin:0 0 9px}
+.inf .ie{font-size:13px;color:var(--ink-2);margin:0;padding-top:9px;border-top:1px solid var(--rule)}
+.inf .ie b{color:var(--ink);font-weight:600}
+
+/* categories */
+.cats{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.crow{display:grid;grid-template-columns:172px 1fr 62px 54px;gap:12px;align-items:center}
+.crow .cl{font-size:13px;color:var(--ink-2);text-align:right;line-height:1.22}
+.ctrack{background:var(--surface-inset);border-radius:4px;height:18px;overflow:hidden}
+.cfill{height:100%;background:var(--s4);border-radius:0 4px 4px 0;transition:width .5s ease}
+.crow .cv,.crow .cr{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right}
+.crow .cr{color:var(--ink-3)}
+.chead{display:grid;grid-template-columns:172px 1fr 62px 54px;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.chead span:nth-child(3),.chead span:nth-child(4){text-align:right}
+
+/* ceiling */
+.tog{display:flex;gap:13px;align-items:flex-start;padding:15px 17px;border:1px solid var(--rule-2);border-radius:9px;background:var(--surface);cursor:pointer;margin-bottom:9px;transition:border-color .12s,background .12s}
+.tog:hover{border-color:var(--ink-3)}
+.tog[data-on="1"]{border-color:var(--accent);background:var(--accent-soft)}
+.tog .box{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--rule-2);flex:none;margin-top:2px;display:grid;place-items:center;font-size:12px;color:var(--accent-ink);background:var(--surface)}
+.tog[data-on="1"] .box{background:var(--accent);border-color:var(--accent)}
+.tog .tt{font-size:14.5px;font-weight:500;margin-bottom:3px}
+.tog .td{font-size:13px;color:var(--ink-2)}
+.ceilnum{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;padding:20px 22px;background:var(--surface-2);border:1px solid var(--rule);border-radius:10px;margin-bottom:20px}
+.ceilnum .cb{display:flex;flex-direction:column;gap:3px}
+.ceilnum .ck{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.ceilnum .cvv{font-family:var(--mono);font-size:23px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.ceilnum .arrow{font-size:20px;color:var(--ink-3);padding-bottom:3px}
+
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:20px 24px;border-radius:0 9px 9px 0}
+.note h3{font-family:var(--serif);font-weight:500;font-size:19px;margin:0 0 10px}
+.note p{font-size:14px;color:var(--ink-2);max-width:66ch}
+.note p:last-child{margin-bottom:0}
+.note strong{color:var(--ink);font-weight:600}
+
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;align-items:center}
+.link{appearance:none;background:none;border:0;font-family:var(--sans);font-size:13.5px;color:var(--ink-3);cursor:pointer;padding:6px 2px;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--ink)}
+.link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3);max-width:70ch}
+table.mth{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table.mth th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0 10px 7px 0;border-bottom:1px solid var(--rule)}
+table.mth td{padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+table.mth td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+@media(max-width:620px){
+  h1{font-size:33px}.qtext{font-size:24px}
+  .drow{grid-template-columns:114px 1fr 34px;gap:9px}.drow .dl{font-size:11.5px}
+  .crow,.chead{grid-template-columns:104px 1fr 56px 46px;gap:8px}.crow .cl{font-size:11.5px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="root"></div>
+<div class="tt" id="tt"></div>
+
+<!-- All editable content and model assumptions live here. -->
+<script src="model.js"></script>
+<script>
+(function(){
+
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)};
+var root=document.getElementById('root');
+
+/* ---------------- CONFIG ADAPTER ----------------
+   Everything editable lives in model.js. This maps it into the shapes the
+   scoring routine below expects, so that logic stays untouched and the
+   arithmetic cannot drift when content changes. ---------------------------- */
+var M = window.MODEL;
+if(!M){ document.getElementById('root').innerHTML =
+  '<div style="font-family:system-ui;max-width:34em;margin:60px auto;padding:0 24px;line-height:1.6;color:#12161d">'+
+  '<h1 style="font-size:22px;margin:0 0 14px">Open this through the preview script, not by double-clicking</h1>'+
+  '<p style="color:#525a68">Your browser blocked <code>model.js</code> from loading. That is a security rule '+
+  'about opening files directly from your computer &mdash; nothing is wrong with the files.</p>'+
+  '<p style="color:#525a68"><strong>Fix:</strong> double-click <code>preview.html</code> in this folder instead, '+
+  'or open this file in Chrome.</p>'+
+  '<p style="color:#858d9b;font-size:14px">This affects local preview only. Once deployed, the page loads normally.</p></div>';
+  return; }
+
+var CATS = M.categories.map(function(c){ return {
+  n:c.name, sp:c.spend, mix:c.mix,
+  con:c.online.coverage,  ion:c.online.priceImpact,
+  cin:c.instore.coverage, iin:c.instore.priceImpact, key:c.slider }; });
+var BASELINE = M.baseline;
+var BAND     = M.band;
+var INCOME   = M.incomeBands.map(function(b){ return [b.label,b.factor]; });
+var HH       = M.householdSizes.map(function(b){ return [b.label,b.factor]; });
+var SCALE    = M.spendScaling;
+var DIM = {}; Object.keys(M.dimensions).forEach(function(k){
+  DIM[k] = { n:M.dimensions[k].name, w:M.dimensions[k].weight }; });
+var Q = M.questions.map(function(q){ return { id:q.id, d:q.dim, q:q.text, o:q.options }; });
+var REV = {}; Object.keys(M.reveals).forEach(function(k){ var r=M.reveals[k];
+  REV[k] = { k:r.source, t:r.title, b:r.body, c:r.kicker }; });
+var INF = M.inferences.map(function(f){ return {
+  d:f.dim, hi:f.high, t:f.claim, b:f.because, e:f.evidence }; });
+var CEIL = M.ceiling.map(function(c){ return { t:c.title, d:c.detail, caps:c.caps }; });
+var FEEDBACK = { URL:M.feedback.URL||'', EMAIL:M.feedback.EMAIL||'', FORM_ID:'', entry:{} };
+
+/* ---------------- STATE ---------------- */
+var S={screen:'landing',qi:0,ans:{},income:5,hh:1,
+  mix:{grocery:15,general:44,dining:20,travel:75},
+  /* Default register. The standalone build opens on 'consumer' because that is
+     its audience; the Plain Inference prototype opens on 'builder' because its
+     audience is the data-science students. This is the only intended difference
+     between the two builds - check it first if they look out of sync. */
+  ceil:[0,0,0,0],reg:'consumer',showRev:null,
+  fb:{role:null,landed:null,plausible:null,confusing:'',change:''},fbSent:false};
+
+/* ---------------- SCORING ---------------- */
+function dimScores(caps){
+  /* caps are keyed by QUESTION id and apply to the answer itself, before the
+     dimension is averaged. Capping a dimension mean (the old behaviour) let a
+     strategy move questions it never mentioned - e.g. "treat loyalty programs
+     skeptically" silently capping whether you stay signed in. */
+  var acc={},cnt={};
+  Q.forEach(function(q,i){
+    var v=S.ans[i]; if(v==null) return;
+    if(caps&&caps[q.id]!=null) v=Math.min(v,caps[q.id]);
+    acc[q.d]=(acc[q.d]||0)+v; cnt[q.d]=(cnt[q.d]||0)+1;
+  });
+  var out={};
+  Object.keys(DIM).forEach(function(k){ out[k]=cnt[k]?acc[k]/cnt[k]:50; });
+  return out;
+}
+function composite(ds){
+  /* weights are relative: normalise so they need not total any fixed number */
+  var tw=0,t=0;
+  Object.keys(DIM).forEach(function(k){ tw+=DIM[k].w; t+=ds[k]*DIM[k].w; });
+  return tw? t/tw : 50;
+}
+function multiplier(sc){return 0.6+(sc/100)*0.8}
+/* Income and household size are dampened rather than multiplied straight through.
+   A high-income five-person household does not spend 2.3x the average consumer unit
+   in these categories — savings rate rises with income, and grocery spend scales with
+   headcount while airfare does not. The 0.85 exponent and the [0.55, 2.0] clamp keep
+   the tails plausible. */
+function spendFactor(){
+  var raw=INCOME[S.income][1]*HH[S.hh][1];
+  return Math.min(SCALE.max,Math.max(SCALE.min,Math.pow(raw,SCALE.exponent)));
+}
+function catRows(mult){
+  var sf=spendFactor(), rows=[], tot=0;
+  CATS.forEach(function(c){
+    var mix=c.key&&S.mix[c.key]!=null?S.mix[c.key]/100:c.mix;
+    var sp=c.sp*sf;
+    var on=sp*mix*c.con*(c.ion*mult);
+    var ins=sp*(1-mix)*c.cin*(c.iin*mult);
+    var v=on+ins; tot+=v;
+    rows.push({n:c.n,v:v,sp:sp,rate:sp?v/sp:0});
+  });
+  return {rows:rows,total:tot};
+}
+function money(v){return '$'+Math.round(v).toLocaleString('en-US')}
+function rnd10(v){return Math.round(v/10)*10}
+/* Both band helpers round first, so the band always agrees with the score as
+   displayed. Without this a raw 80.2 shows as "80" but lands in the 81-100
+   band, contradicting the band table the benchmark block publishes. */
+function bandName(sc){
+  sc=Math.round(sc);
+  return sc<=20?'Hard to read':sc<=40?'Harder to read than most':sc<=60?'Typical':sc<=80?'Easy to read':'An open book';
+}
+function bandIdx(sc){sc=Math.round(sc);return sc<=20?0:sc<=40?1:sc<=60?2:sc<=80?3:4}
+
+/* ---------------- RENDER ---------------- */
+function regBar(){
+  return '<div class="row" style="justify-content:space-between;margin-bottom:26px">'+
+   '<span class="eyebrow" style="margin:0">Model '+M.version+' · '+M.versionDate+'</span>'+
+   '<span class="reg"><button id="rg-b" aria-pressed="'+(S.reg==='builder')+'">Builder</button>'+
+   '<button id="rg-c" aria-pressed="'+(S.reg==='consumer')+'">Consumer</button></span></div>';
+}
+function wireReg(){
+  var b=$('#rg-b'),c=$('#rg-c');
+  if(b)b.onclick=function(){S.reg='builder';render()};
+  if(c)c.onclick=function(){S.reg='consumer';render()};
+}
+
+var NUMWORD={1:'One',2:'Two',3:'Three',4:'Four',5:'Five',6:'Six',7:'Seven',8:'Eight',9:'Nine',
+  10:'Ten',11:'Eleven',12:'Twelve',13:'Thirteen',14:'Fourteen',15:'Fifteen',
+  16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty'};
+function qCount(){ return NUMWORD[Q.length] || String(Q.length); }
+function qMinutes(){ return Math.max(2, Math.round(Q.length*11/60)); }
+/* The number of scored categories is derived from the dimension table, so copy
+   cannot drift from the model the way the hardcoded "Seven categories" did. */
+function dCount(){ var n=Object.keys(DIM).length; return NUMWORD[n] || String(n); }
+
+function vLanding(){
+  var builder=S.reg==='builder';
+  return regBar()+
+  '<h1>What your data costs you</h1>'+
+  '<p class="lede">'+(builder
+    ? qCount()+' questions about how you shop, then an estimate of what being priced as <em>you</em>, rather than as an anonymous shopper, costs you in a year. You are about to be on the receiving end of the kind of model you will be asked to build.'
+    : qCount()+' questions about how you shop, then an estimate of what being priced as <em>you</em>, rather than as an anonymous shopper, costs you in a year.')+'</p>'+
+  '<div class="priv"><span class="ic">PRIVACY</span><div>This page sets <strong>no cookies</strong>, runs <strong>no analytics</strong>, and asks for <strong>no email address</strong>. Your answers never leave your browser — the whole calculation runs on your device, and we never see your score. The server that sends you this page logs the request, as every website does. It learns that someone loaded a page, never anything you answered. (There is an optional feedback form at the very end. It is the only thing here that sends anything.)</div></div>'+
+  '<div class="panel"><h2>How it works</h2>'+
+  '<p class="sub" style="margin-bottom:14px">Your answers are scored across the six categories of behavioral data that pricing systems use to infer [[willingness to pay]]. That score adjusts a published model of [[surveillance pricing]] across ten categories of household spending — a model whose baseline is <strong style="color:var(--ink)">$1,848 per household per year</strong>.</p>'+
+  '<p class="sub" style="margin-bottom:0">Every figure it returns is a range. The model supports an estimate, not a bill.</p></div>'+
+  '<div class="nav"><span></span><button class="act primary big" id="go">Start — '+Q.length+' questions, about '+qMinutes()+' minutes</button></div>'+
+  '<p class="foot">Built on the model and evidence in written testimony to the Senate Judiciary Committee, Subcommittee on Crime and Counterterrorism, 4 August 2026. All patents and cases cited are real and are named in that testimony. This prototype uses synthetic defaults and collects nothing.</p>';
+}
+
+function vQuestion(){
+  var i=S.qi,q=Q[i],pct=Math.round(i/Q.length*100);
+  var h=regBar()+'<div class="prog"><div class="ptrack"><i style="width:'+pct+'%"></i></div><span class="pnum">'+(i+1)+' / '+Q.length+'</span></div>';
+  h+='<div class="qdim">'+DIM[q.d].n+'</div><h2 class="qtext">'+q.q+'</h2><div class="opts">';
+  q.o.forEach(function(o,j){
+    h+='<button class="opt" data-v="'+o[1]+'" aria-pressed="'+(S.ans[i]===o[1])+'">'+o[0]+'</button>';
+  });
+  h+='</div><div class="nav"><button class="link" id="back">'+(i===0?'Back to start':'Previous')+'</button><span class="pnum">no answers are transmitted</span></div>';
+  return h;
+}
+
+function vReveal(){
+  var r=REV[S.showRev];
+  return regBar()+'<div class="reveal"><div class="rk">'+r.k+'</div><p class="rt">'+r.t+'</p><p class="rb">'+r.b+'</p><div class="rc">'+r.c+'</div></div>'+
+   '<div class="nav"><span></span><button class="act primary" id="cont">Continue</button></div>';
+}
+
+function vCalib(){
+  var h=regBar()+'<h2>Two things about your household</h2><p class="sub"><strong style="color:var(--ink)">These two answers are used for one thing: estimating how much you spend in a year.</strong> The model is built on the average US [[consumer unit]], and household size and income scale that spending up or down to match you. The percentages are then applied to that figure. They are not used to judge you, are not part of your score, and are not stored or sent anywhere.</p><div class="panel">';
+  h+='<div class="field"><span class="flab">Household size</span><div class="chips" id="hh">';
+  HH.forEach(function(x,i){h+='<button class="chip" data-i="'+i+'" aria-pressed="'+(S.hh===i)+'">'+x[0]+'</button>'});
+  h+='</div></div><div class="field"><span class="flab">Household income</span><div class="chips" id="inc">';
+  INCOME.forEach(function(x,i){h+='<button class="chip" data-i="'+i+'" aria-pressed="'+(S.income===i)+'">'+x[0]+'</button>'});
+  h+='</div></div>';
+  h+='<div class="field" style="margin-bottom:6px"><span class="flab">How much of each do you buy online?</span><p class="fhelp">Defaults are US averages. Move them if yours are different.</p>';
+  [['grocery','Groceries'],['general','General merchandise'],['dining','Restaurants & delivery'],['travel','Travel & hotels']].forEach(function(m){
+    h+='<div class="srow"><div><label for="sl-'+m[0]+'">'+m[1]+'</label><input type="range" id="sl-'+m[0]+'" data-k="'+m[0]+'" min="0" max="95" value="'+Math.min(95,S.mix[m[0]])+'"></div><span class="sv" id="sv-'+m[0]+'">'+S.mix[m[0]]+'%</span></div>';
+  });
+  h+='</div></div><div class="nav"><button class="link" id="back">Previous</button><button class="act primary big" id="calc">See the number</button></div>';
+  return h;
+}
+
+function scoreCtx(){
+  var ds=dimScores(),sc=composite(ds),mult=multiplier(sc),r=catRows(mult);
+  return {ds:ds,sc:sc,mult:mult,r:r,
+    lo:rnd10(r.total*(1-BAND)), hi:rnd10(r.total*(1+BAND))};
+}
+
+/* ---- SCREEN A: the score, and what it lets them infer ---- */
+function vScore(){
+  var c=scoreCtx(),ds=c.ds,sc=c.sc;
+  var h=regBar();
+  h+='<div class="panel hero" style="padding:40px 26px 34px">'+
+     '<div class="hk">Your willingness-to-pay score</div>'+
+     '<div class="hv">'+Math.round(sc)+'</div>'+
+     '<p class="hs">'+bandName(sc)+'</p>'+
+     '<div class="hc">average US household in this model · 50</div></div>';
+  h+='<div class="caveat" style="background:var(--accent-soft);border-color:var(--accent)"><span class="ic" style="color:var(--accent)">TERM</span><div><strong>“Willingness to pay” is their phrase, not ours.</strong> It is the standard industry term for how price-sensitive you are — a high score means a pricing system expects you to pay more without walking away. This is the kind of number that gets computed about you, sold, and acted on, without ever being shown to you.</div></div>';
+
+  h+='<div class="panel" style="margin-top:18px"><h2>What the score is made of</h2><p class="sub">'+dCount()+' categories of behavioral data, weighted by how heavily each is used to infer price sensitivity. Sorted by where you are easiest to read.</p>'+
+   '<div class="scalebar"><span class="base" style="left:50%"></span><span class="youlab" style="left:'+Math.min(Math.max(sc,3),97)+'%">You</span><span class="you" style="left:'+sc+'%"></span></div>'+
+   '<div class="scalelabs"><span>0 · hard to read</span><span>50 · average household</span><span>100 · easy to read</span></div>';
+  var sorted=Object.keys(DIM).map(function(k){return {k:k,v:ds[k]}}).sort(function(a,b){return b.v-a.v});
+  h+='<div class="dims">';
+  sorted.forEach(function(d){
+    var sh=d.v>=70?'--s5':d.v>=55?'--s4':d.v>=40?'--s3':d.v>=25?'--s2':'--s1';
+    h+='<div class="drow"><div class="dl">'+DIM[d.k].n+'</div><div class="dtrack"><div class="dfill" style="width:'+d.v+'%;background:var('+sh+')"></div></div><div class="dv">'+Math.round(d.v)+'</div></div>';
+  });
+  h+='</div></div>';
+
+  var picks=[],used={};
+  sorted.slice(0,3).forEach(function(d){
+    var m=INF.filter(function(x){return x.d===d.k&&x.hi===1})[0];
+    if(m&&d.v>=48&&!used[m.t]){picks.push(m);used[m.t]=1}
+  });
+  sorted.slice().reverse().forEach(function(d){
+    if(picks.length>=4) return;
+    var m=INF.filter(function(x){return x.d===d.k&&x.hi===0})[0];
+    if(m&&d.v<=38&&!used[m.t]){picks.push(m);used[m.t]=1}
+  });
+  if(!picks.length) picks=[INF[0]];
+  h+='<div class="panel" style="margin-top:18px"><h2>What they can infer about you</h2><p class="sub">Drawn from your highest- and lowest-scoring dimensions. Every claim resolves to a granted patent or a documented case.</p><div class="infs">';
+  picks.forEach(function(p){h+='<div class="inf"><p class="it">“'+p.t+'”</p><p class="ib">'+p.b+'</p><p class="ie">'+p.e+'</p></div>'});
+  h+='</div></div>';
+
+  h+='<div class="nav"><button class="link" id="restart">Start over</button><button class="act primary big" id="tocost">Find out how much more you could be paying</button></div>';
+  return h;
+}
+
+/* ---- SCREEN B: what it costs ---- */
+function vCost(){
+  var c=scoreCtx(),r=c.r;
+  var h=regBar();
+  h+='<div class="panel hero"><div class="hk">Estimated additional annual cost</div>'+
+     '<div class="hv">'+money(c.lo)+' – '+money(c.hi)+'</div>'+
+     '<p class="hs">of being priced as you, rather than as an anonymous shopper</p>'+
+     '<div class="hc">average US household in this model · '+money(BASELINE)+'</div></div>';
+  h+='<div class="caveat"><span class="ic">NOTE</span><div><strong>This is an estimate, not a bill.</strong> It is a published model applied to your answers. The range reflects uncertainty in the model’s assumptions — it is not a statistical confidence interval, and the tool would be lying if it presented one.</div></div>';
+
+  var mx=Math.max.apply(null,r.rows.map(function(x){return x.v}));
+  var srt=r.rows.slice().sort(function(a,b){return b.v-a.v});
+  h+='<div class="panel" style="margin-top:18px"><h2>Where the money goes</h2><p class="sub">Travel and entertainment carry the highest rates — they are the mature dynamic-pricing categories. Groceries and general merchandise carry the largest dollars, because that is where the spending is. The gap between where you feel it and where it actually is, is the point.</p>'+
+   '<div class="chead"><span></span><span></span><span>per year</span><span>rate</span></div><div class="cats">';
+  srt.forEach(function(cc){
+    h+='<div class="crow"><div class="cl">'+cc.n+'</div><div class="ctrack"><div class="cfill" style="width:'+(cc.v/mx*100)+'%"></div></div><div class="cv">'+money(cc.v)+'</div><div class="cr">'+(cc.rate*100).toFixed(1)+'%</div></div>';
+  });
+  h+='</div></div>';
+  h+='<div class="nav"><button class="link" id="back">Back to your score</button><button class="act primary big" id="toceil">'+(S.reg==='builder'?'Now the interesting part':'What can you actually do?')+'</button></div>';
+  return h;
+}
+
+function vCeiling(){
+  var ds0=dimScores(),sc0=composite(ds0),r0=catRows(multiplier(sc0));
+  var caps={};
+  CEIL.forEach(function(c,i){ if(S.ceil[i]) Object.keys(c.caps).forEach(function(k){
+    caps[k]=caps[k]==null?c.caps[k]:Math.min(caps[k],c.caps[k]); }); });
+  var ds1=dimScores(caps),sc1=composite(ds1),r1=catRows(multiplier(sc1));
+  var saved=r0.total-r1.total, pct=r0.total?Math.round(saved/r0.total*100):0;
+  var builder=S.reg==='builder';
+  var h=regBar()+'<h2>'+(builder?'The ceiling on self-defense':'What you can actually do')+'</h2>'+
+   '<p class="sub">'+(builder
+     ? 'These four strategies are real, and they are the complete set available to an individual. Turn all of them on and watch where the number stops.'
+     : 'Four things you can do, drawn from the testimony. Turn them on and see what each one is worth.')+'</p>';
+  h+='<div class="ceilnum"><div class="cb"><span class="ck">As you shop now</span><span class="cvv">'+money(rnd10(r0.total*(1-BAND)))+'–'+money(rnd10(r0.total*(1+BAND)))+'</span></div>'+
+     '<span class="arrow">→</span>'+
+     '<div class="cb"><span class="ck">With these on</span><span class="cvv">'+money(rnd10(r1.total*(1-BAND)))+'–'+money(rnd10(r1.total*(1+BAND)))+'</span></div>'+
+     '<div class="cb"><span class="ck">Recovered</span><span class="cvv">'+pct+'%</span></div></div>';
+  CEIL.forEach(function(c,i){
+    h+='<div class="tog" data-i="'+i+'" data-on="'+(S.ceil[i]?1:0)+'" role="button" tabindex="0"><span class="box">'+(S.ceil[i]?'✓':'')+'</span><span><span class="tt">'+c.t+'</span><span class="td">'+c.d+'</span></span></div>';
+  });
+  h+='<div class="note" style="margin-top:22px"><h3>'+(builder?'Read the number you just produced':'You should not have to do any of this')+'</h3>'+
+   (builder
+    ? '<p>You have just watched a perfectly diligent consumer — signed out, patient, skeptical of loyalty programs, cookies blocked — recover <strong>'+pct+'%</strong> of what the system extracts. <strong>That is the ceiling on self-defense.</strong></p>'+
+      '<p>Your willingness-to-pay score fell from '+Math.round(sc0)+' to '+Math.round(sc1)+' — a '+Math.round((sc0-sc1)/sc0*100)+'% drop in how readable you are, which bought a '+pct+'% drop in cost. The gap is structural. Even a consumer who becomes impossible to read still pays, because most of the extraction is a property of the market they shop in, not the traces they leave.</p>'+
+      '<p>The remaining '+(100-pct)+'% is not the shopper’s to control. It is set by whoever specifies the feature store, chooses the coverage, and signs off on the experiment. That is a design decision, and at some point it will be yours.</p>'+
+      '<p>The testimony frames this as a professional question rather than a consumer one. Data science has ethical codes, but none tied to licensure, none enforceable against an individual practitioner, and no board that can bar anyone from practice. <strong>The only meaningful guardrails are the conscience of the data scientists and business executives who build these systems.</strong></p>'
+    : '<p>Every strategy above is real, and every one of them is tedious. Together they recover <strong>'+pct+'%</strong> — and no individual can fully opt out.</p>'+
+      '<p><strong>Consumer self-defense is necessary but insufficient.</strong> The fix is requiring informed consent before behavior can be used to price a person — which would return the whole amount rather than a third of it.</p>'+
+      '<p>As of 1 August 2026, three states have formal regulations on surveillance pricing and 24 have legislation proposed. More than 40 bills have been introduced across at least 24 states this year, and three federal bills are live.</p>')+
+   '</div>';
+  h+='<div class="nav"><button class="link" id="back">Back to results</button><button class="act" id="tometh">How this was calculated</button></div>';
+  return h;
+}
+
+function vMethod(){
+  var ds=dimScores(),sc=composite(ds),mult=multiplier(sc);
+  var h=regBar()+'<h2>How this was calculated</h2><p class="sub">The reader this page is written for is a pricing analyst at a retailer looking for the flaw.</p>';
+  h+='<div class="panel"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">The model</h3>'+
+   '<p class="sub">For each of ten spending categories, split into online and in-store channels:</p>'+
+   '<p style="font-family:var(--mono);font-size:13px;background:var(--surface-inset);padding:13px 15px;border-radius:8px;margin-bottom:14px">impact = channel spend × DP coverage × price impact</p>'+
+   '<table class="mth"><thead><tr><th>Term</th><th>Personalized?</th><th>Why</th></tr></thead><tbody>'+
+   '<tr><td>channel spend</td><td>Yes</td><td>Household size, income band, and your online-mix answers. A fact about you.</td></tr>'+
+   '<tr><td>DP coverage</td><td><strong>No</strong></td><td>Held at published model values. A fact about the market, not about you — personalizing it would be the tool inventing data.</td></tr>'+
+   '<tr><td>price impact</td><td>Yes</td><td>Multiplied by your willingness-to-pay score. This is the term your behavior actually moves.</td></tr>'+
+   '</tbody></table></div>';
+  h+='<div class="panel" style="margin-top:16px"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">Your numbers</h3><table class="mth"><tbody>'+
+   '<tr><td>composite score</td><td colspan="2">'+Math.round(sc)+' / 100</td></tr>'+
+   '<tr><td>multiplier</td><td colspan="2">0.6 + (score ÷ 100) × 0.8 = <strong>'+mult.toFixed(3)+'×</strong></td></tr>'+
+   '<tr><td>model version</td><td colspan="2">'+M.version+' · '+M.versionDate+'</td></tr>'+
+   '<tr><td>spend factor</td><td colspan="2">'+spendFactor().toFixed(2)+'× the average consumer unit (exponent '+SCALE.exponent+', clamped '+SCALE.min+'–'+SCALE.max+')</td></tr>'+
+   '<tr><td>displayed band</td><td colspan="2">point estimate ±'+Math.round(BAND*100)+'%, reflecting residual uncertainty in the personalization step</td></tr>'+
+   '</tbody></table></div>';
+  h+='<div class="panel" style="margin-top:16px"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">Calibration and limits</h3>'+
+   '<p class="sub">A composite of <strong style="color:var(--ink)">50 reproduces the published baseline exactly</strong> — $1,848 per household per year. The model describes the average household, so average behavior returns the average outcome. The score does not invent a figure; it moves you around a published one.</p>'+
+   '<p class="sub">The multiplier runs 0.6× to 1.4×, producing a blended extraction rate of 2.3% to 5.4% across all modeled spend. The testimony adopts 3–12% as its own conservative envelope and cites published research finding 5–20% by category. Nothing here exceeds what that analysis already defends.</p>'+
+   '<p class="sub"><strong style="color:var(--ink)">What the band does and does not mean.</strong> The ±'+Math.round(BAND*100)+'% shown around the figure covers uncertainty added by fitting the model to your answers. It does <em>not</em> restate the uncertainty in the underlying model — that is disclosed here instead, and it is larger. A wider band would double-count it in the headline number; it would not make the estimate more accurate.</p>'+
+   '<p class="sub"><strong style="color:var(--ink)">Six categories, not seven.</strong> The testimony describes seven kinds of behavioural data. This instrument measures six. An earlier version also asked when you shop and how long you deliberate, and those questions were dropped. They carried the least weight and separated people least — the shorter instrument correlates with the longer one at 0.998 — but time of day is a documented pricing input and this tool no longer captures it.</p>'+
+   '<p class="sub"><strong style="color:var(--ink)">Adults and households are different units.</strong> A representative survey of US adults puts the median score at 53, which this model prices at about $1,897 — a little above the $1,848 figure the model uses for an average household. The two are not expected to match. A household holds several adults with different scores, and the baseline is a household figure. The gap is about 2.6% and is disclosed rather than tuned away.</p>'+
+   '<p class="sub"><strong style="color:var(--ink)">Spend scaling is dampened.</strong> Income and household size are combined as (income × size)<sup>0.85</sup>, clamped to 0.55–2.0, rather than multiplied straight through. A high-income five-person household does not spend 2.3× the average consumer unit in these categories. The exponent is a judgement, not a fitted parameter, and is the least evidenced number in the model.</p>'+
+   '<p class="sub" style="margin-bottom:0"><strong style="color:var(--ink)">Known limits.</strong> The model excludes mortgage, auto loans, debt repayment, insurance and healthcare. Coverage figures are estimates. It is calibrated to a $2,000/household target and reaches 92.4% of it. Spend scaling uses one global factor, though grocery spending tracks household size and airfare tracks income differently. Patent counts for 2024–25 are undercounted because applications publish about 18 months after filing.</p></div>';
+  h+='<div class="nav"><button class="link" id="restart">Start over</button><button class="act primary big" id="tofb">Give feedback on this prototype</button></div>';
+  return h;
+}
+
+function vFeedback(){
+  var h=regBar()+'<h2>Help us make this better</h2>'+
+   '<p class="sub">This is a prototype, not a finished tool. You are seeing it precisely because your reaction is the thing we cannot get any other way.</p>';
+
+  h+='<div class="panel"><h3 style="font-family:var(--serif);font-weight:500;font-size:20px;margin-bottom:12px">What would be most useful to hear</h3>'+
+   '<p class="sub" style="margin-bottom:14px">Anything at all is welcome. If you want prompts, these are the questions we cannot answer ourselves:</p>'+
+   '<ul style="margin:0 0 4px;padding-left:20px;color:var(--ink-2);font-size:14px;max-width:66ch">'+
+   '<li style="margin-bottom:7px">Did the score feel like it described you? Which dimension got you most wrong?</li>'+
+   '<li style="margin-bottom:7px">Was the dollar figure believable — or did it read as too high, too precise, or made up?</li>'+
+   '<li style="margin-bottom:7px">Any question you had to guess at, or that could be read two ways?</li>'+
+   '<li style="margin-bottom:7px">If you went looking for the assumptions, did you find them, and did they hold up?</li>'+
+   '<li style="margin-bottom:0">Where did you stop caring? That one matters more than the compliments.</li>'+
+   '</ul></div>';
+
+  h+='<div class="priv" style="border-color:var(--ref);background:var(--ref-soft)"><span class="ic" style="color:var(--ref)">BEFORE YOU DO</span><div>'+
+   'The form opens on Google and is <strong>anonymous</strong> — no name, no email, no sign-in required. '+
+   '<strong>Nothing travels with you.</strong> Your answers, your score and your figure stay on this device; the form starts blank and sees only what you type into it. '+
+   'If you would rather say nothing, close the tab and nothing has been sent.</div></div>';
+
+  h+='<div class="nav"><button class="link" id="back">Back</button><button class="act primary big" id="fbsend">'+fbLabel()+'</button></div>';
+  if(S.fbSent) h+='<p class="foot">Thank you — the form opened in a new tab. If it did not, check that your browser allowed the popup.</p>';
+  return h;
+}
+
+function fbText(){
+  var f=S.fb;
+  return 'Role: '+(f.role||'—')+'\n'+
+         'Landed hardest: '+(f.landed||'—')+'\n'+
+         'Figure plausible: '+(f.plausible||'—')+'\n'+
+         'Confusing/unclear: '+(f.confusing||'—')+'\n'+
+         'Would change: '+(f.change||'—');
+}
+function fbMode(){
+  if(FEEDBACK.URL) return 'url';
+  if(FEEDBACK.EMAIL) return 'email';
+  if(FEEDBACK.FORM_ID) return 'prefill';
+  return 'clipboard';
+}
+function fbLabel(){
+  var m=fbMode();
+  return m==='url'?'Open the feedback form':m==='email'?'Send feedback by email':m==='prefill'?'Send feedback':'Copy my answers';
+}
+function fbConfirm(){
+  var m=fbMode();
+  return m==='url'?'The feedback form opened in a new tab. Your answers are on screen here — copy anything you want to carry over.'
+    :m==='email'?'A message opened in your mail app with your answers filled in. It is not sent until you press send.'
+    :m==='prefill'?'A form opened in a new tab with your answers filled in — press Submit there to finish.'
+    :'Your answers were copied to the clipboard. Paste them wherever the organizers asked.';
+}
+function fbSubmit(){
+  var f=S.fb,m=fbMode(),t=fbText();
+  if(m==='url'){ window.open(FEEDBACK.URL,'_blank','noopener'); S.fbSent=true; render(); return; }
+  if(m==='email'){
+    window.location.href='mailto:'+encodeURIComponent(FEEDBACK.EMAIL)+
+      '?subject='+encodeURIComponent('Prototype feedback — What Your Data Costs You')+
+      '&body='+encodeURIComponent(t);
+    S.fbSent=true; render(); return;
+  }
+  if(m==='prefill'){
+    var q=[],e=FEEDBACK.entry;
+    ['role','landed','plausible','confusing','change'].forEach(function(k){
+      if(e[k]&&f[k]) q.push(e[k]+'='+encodeURIComponent(f[k]));
+    });
+    window.open('https://docs.google.com/forms/d/e/'+FEEDBACK.FORM_ID+'/viewform?usp=pp_url&'+q.join('&'),'_blank','noopener');
+    S.fbSent=true; render(); return;
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){S.fbSent=true;render()},function(){window.prompt('Copy your feedback:',t)});
+  } else { window.prompt('Copy your feedback:',t); S.fbSent=true; render(); }
+}
+
+/* ---------------- GLOSSARY ----------------
+   Any copy may wrap a term in [[double brackets]]. This turns it into a
+   dotted-underlined control that reveals a definition on hover, on keyboard
+   focus, and on tap - hover alone would leave phone users with nothing. */
+function escAttr(x){ return String(x).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+  .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function gloss(html){
+  if(!M.glossary) return String(html).replace(/\[\[([^\]]+)\]\]/g,'$1');
+  return String(html).replace(/\[\[([^\]]+)\]\]/g,function(_,term){
+    var g=M.glossary[term.toLowerCase()]||M.glossary[term];
+    if(!g) return term;
+    return '<span class="glw"><button type="button" class="gl">'+escAttr(term)+'</button>'+
+           '<span class="gltip" role="tooltip"><b>'+escAttr(g.term)+'</b>'+escAttr(g.definition)+'</span></span>';
+  });
+}
+
+/* ---------------- ROUTER ---------------- */
+function render(){
+  var v;
+  if(S.screen==='landing')v=vLanding();
+  else if(S.screen==='q')v=S.showRev!=null?vReveal():vQuestion();
+  else if(S.screen==='calib')v=vCalib();
+  else if(S.screen==='score')v=vScore();
+  else if(S.screen==='cost')v=vCost();
+  else if(S.screen==='ceiling')v=vCeiling();
+  else if(S.screen==='feedback')v=vFeedback();
+  else v=vMethod();
+  root.innerHTML=gloss(v);
+  root.className='wrap'+(S.screen==='score'||S.screen==='cost'||S.screen==='method'?' wide':'');
+  wire(); wireReg(); wireGloss();
+  window.scrollTo(0,0);
+}
+function wireGloss(){
+  root.querySelectorAll('.glw').forEach(function(w){
+    var btn=w.querySelector('.gl'); if(!btn) return;
+    btn.onclick=function(e){
+      e.preventDefault();
+      var open=w.classList.contains('open');
+      root.querySelectorAll('.glw.open').forEach(function(o){o.classList.remove('open')});
+      if(!open) w.classList.add('open');
+    };
+    btn.onkeydown=function(e){ if(e.key==='Escape') w.classList.remove('open'); };
+  });
+}
+function wire(){
+  var go=$('#go'); if(go)go.onclick=function(){S.screen='q';S.qi=0;render()};
+  var cont=$('#cont'); if(cont)cont.onclick=function(){S.showRev=null;advance();};
+  root.querySelectorAll('.opt').forEach(function(b){
+    b.onclick=function(){ S.ans[S.qi]=+b.getAttribute('data-v');
+      if(REV[S.qi]){S.showRev=S.qi;render();} else advance(); };
+  });
+  var back=$('#back'); if(back)back.onclick=function(){
+    if(S.screen==='q'){ if(S.qi===0){S.screen='landing'}else{S.qi--} }
+    else if(S.screen==='calib'){S.screen='q';S.qi=Q.length-1}
+    else if(S.screen==='cost'){S.screen='score'}
+    else if(S.screen==='ceiling'){S.screen='cost'}
+    else if(S.screen==='feedback'){S.screen='method'}
+    else if(S.screen==='method'){S.screen='ceiling'}
+    render();
+  };
+  root.querySelectorAll('#hh .chip').forEach(function(b){b.onclick=function(){S.hh=+b.getAttribute('data-i');render()}});
+  root.querySelectorAll('#inc .chip').forEach(function(b){b.onclick=function(){S.income=+b.getAttribute('data-i');render()}});
+  root.querySelectorAll('input[type=range]').forEach(function(sl){
+    sl.oninput=function(){var k=sl.getAttribute('data-k');S.mix[k]=+sl.value;$('#sv-'+k).textContent=sl.value+'%'};
+  });
+  var calc=$('#calc'); if(calc)calc.onclick=function(){S.screen='score';render()};
+    var tcost=$('#tocost'); if(tcost)tcost.onclick=function(){S.screen='cost';render()};
+  var tc=$('#toceil'); if(tc)tc.onclick=function(){S.screen='ceiling';render()};
+  var tfb=$('#tofb'); if(tfb)tfb.onclick=function(){S.screen='feedback';render()};
+  var fbs=$('#fbsend'); if(fbs)fbs.onclick=fbSubmit;
+  root.querySelectorAll('.chips[data-fb]').forEach(function(g){
+    var k=g.getAttribute('data-fb');
+    g.querySelectorAll('.chip').forEach(function(b){
+      b.onclick=function(){ var v=b.getAttribute('data-v'); S.fb[k]=(S.fb[k]===v?null:v); render(); };
+    });
+  });
+  root.querySelectorAll('textarea[data-fb]').forEach(function(t){
+    t.oninput=function(){ S.fb[t.getAttribute('data-fb')]=t.value; };
+  });
+  var tm=$('#tometh'); if(tm)tm.onclick=function(){S.screen='method';render()};
+  var rs=$('#restart'); if(rs)rs.onclick=function(){S.screen='landing';S.qi=0;S.ans={};S.ceil=[0,0,0,0];S.fb={role:null,landed:null,plausible:null,confusing:'',change:''};S.fbSent=false;render()};
+  root.querySelectorAll('.tog').forEach(function(t){
+    var f=function(){var i=+t.getAttribute('data-i');S.ceil[i]=S.ceil[i]?0:1;render()};
+    t.onclick=f;
+    t.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}};
+  });
+}
+function advance(){
+  if(S.qi<Q.length-1){S.qi++;render()}
+  else{S.screen='calib';render()}
+}
+render();
+})();
+
+})();
+</script>
+</body>
+</html>

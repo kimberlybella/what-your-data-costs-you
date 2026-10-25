@@ -1,0 +1,6 @@
+# Kept in the repo, never served. Vercel publishes every file in the root
+# of a static project, so anything internal has to be excluded here or it
+# ends up at a public URL.
+README.md
+HANDOFF-what-your-data-costs-you.md
+fonts/README.txt
