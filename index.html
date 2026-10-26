@@ -310,10 +310,11 @@ var FEEDBACK = { URL:M.feedback.URL||'', EMAIL:M.feedback.EMAIL||'', FORM_ID:'',
 /* ---------------- STATE ---------------- */
 var S={screen:'landing',qi:0,ans:{},income:5,hh:1,
   mix:{grocery:15,general:44,dining:20,travel:75},
-  /* Default register. The standalone build opens on 'consumer' because that is
-     its audience; the Plain Inference prototype opens on 'builder' because its
-     audience is the data-science students. This is the only intended difference
-     between the two builds - check it first if they look out of sync. */
+  /* Default register. Opens on 'consumer', which is who this is for. The
+     builder register is one click away in the header and is what the workshops
+     use. There was a second build of this tool on Plain Inference that opened
+     on 'builder' instead; it has been removed and that URL now redirects here,
+     so this is the only copy. */
   ceil:[0,0,0,0],reg:'consumer',showRev:null,fbFrom:null,
   fb:{role:null,landed:null,plausible:null,confusing:'',change:''},fbSent:false};
 
@@ -474,7 +475,7 @@ function vLanding(){
   '<p class="sub" style="margin-bottom:14px">Your answers are scored across the six categories of behavioral data that pricing systems use to infer [[willingness to pay]]. That score adjusts a published model of [[surveillance pricing]] across ten categories of household spending — a model whose baseline is <strong style="color:var(--ink)">$1,848 per household per year</strong>.</p>'+
   '<p class="sub" style="margin-bottom:0">Every figure it returns is a range. The model supports an estimate, not a bill.</p></div>'+
   '<div class="nav"><span></span><button class="act primary big" id="go">Start — '+Q.length+' questions, about '+qMinutes()+' minutes</button></div>'+
-  '<p class="foot">Built on the model and evidence in written testimony to the Senate Judiciary Committee, Subcommittee on Crime and Counterterrorism, 4 August 2026. All patents and cases cited are real and are named in that testimony. This prototype uses synthetic defaults and collects nothing.</p>';
+  '<p class="foot">Built on the model and evidence in written testimony to the Senate Judiciary Committee, Subcommittee on Crime and Counterterrorism, 4 August 2026. All patents and cases cited are real and are named in that testimony. Comparisons with other adults come from a representative survey of 991 US adults, fielded in October 2026. This page sets no cookies and runs no analytics.</p>';
 }
 
 function vQuestion(){
@@ -661,7 +662,7 @@ function vMethod(){
 
 function vFeedback(){
   var h=regBar()+'<h2>Help us make this better</h2>'+
-   '<p class="sub">This is a prototype, not a finished tool. You are seeing it precisely because your reaction is the thing we cannot get any other way.</p>';
+   '<p class="sub">You are seeing it precisely because your reaction is the thing we cannot get any other way.</p>';
 
   h+='<div class="panel"><h3 style="font-family:var(--serif);font-weight:500;font-size:20px;margin-bottom:12px">What would be most useful to hear</h3>'+
    '<p class="sub" style="margin-bottom:14px">Anything at all is welcome. If you want prompts, these are the questions we cannot answer ourselves:</p>'+
@@ -713,7 +714,7 @@ function fbSubmit(){
   if(m==='url'){ window.open(FEEDBACK.URL,'_blank','noopener'); S.fbSent=true; render(); return; }
   if(m==='email'){
     window.location.href='mailto:'+encodeURIComponent(FEEDBACK.EMAIL)+
-      '?subject='+encodeURIComponent('Prototype feedback — What Your Data Costs You')+
+      '?subject='+encodeURIComponent('Feedback — What Your Data Costs You')+
       '&body='+encodeURIComponent(t);
     S.fbSent=true; render(); return;
   }
