@@ -366,11 +366,43 @@ function rnd10(v){return Math.round(v/10)*10}
 /* Both band helpers round first, so the band always agrees with the score as
    displayed. Without this a raw 80.2 shows as "80" but lands in the 81-100
    band, contradicting the band table the benchmark block publishes. */
+/* The five bands are defined once, in model.js, as M.benchmark.bands. The
+   label shown under a score and the published distribution both read that
+   table, so they cannot disagree. They used to be two hand-kept lists.
+
+   The edges are survey percentiles rather than twentieths of the axis,
+   because averaging fifteen partly independent answers pulls everyone toward
+   the middle. Cut evenly, nothing scored below 21 or above 80 and two of the
+   five labels could never be shown to anyone.
+
+   Both helpers round first, so the band always agrees with the score as
+   displayed. Without that a raw 58.4 shows as "58" and lands in the band
+   above, contradicting the table. */
+function bandTable(){
+  var B=(typeof M!=='undefined'&&M.benchmark&&M.benchmark.bands)?M.benchmark.bands:null;
+  if(!B||!B.length) return null;
+  var out=[];
+  for(var i=0;i<B.length;i++){
+    var hi=parseInt(String(B[i].range).split('-')[1],10);
+    if(isNaN(hi)) return null;
+    out.push({label:B[i].label, hi:hi});
+  }
+  return out;
+}
 function bandName(sc){
   sc=Math.round(sc);
-  return sc<=20?'Hard to read':sc<=40?'Harder to read than most':sc<=60?'Typical':sc<=80?'Easy to read':'An open book';
+  var t=bandTable();
+  if(!t) return sc<=20?'Hard to read':sc<=40?'Harder to read than most':sc<=60?'Typical':sc<=80?'Easy to read':'An open book';
+  for(var i=0;i<t.length;i++) if(sc<=t[i].hi) return t[i].label;
+  return t[t.length-1].label;
 }
-function bandIdx(sc){sc=Math.round(sc);return sc<=20?0:sc<=40?1:sc<=60?2:sc<=80?3:4}
+function bandIdx(sc){
+  sc=Math.round(sc);
+  var t=bandTable();
+  if(!t) return sc<=20?0:sc<=40?1:sc<=60?2:sc<=80?3:4;
+  for(var i=0;i<t.length;i++) if(sc<=t[i].hi) return i;
+  return t.length-1;
+}
 
 /* Where a score sits among the surveyed adults, as a sentence.
 
@@ -606,7 +638,7 @@ function vMethod(){
    '<p class="sub"><strong style="color:var(--ink)">What the band does and does not mean.</strong> The ±'+Math.round(BAND*100)+'% shown around the figure covers uncertainty added by fitting the model to your answers. It does <em>not</em> restate the uncertainty in the underlying model — that is disclosed here instead, and it is larger. A wider band would double-count it in the headline number; it would not make the estimate more accurate.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Six categories, not seven.</strong> The testimony describes seven kinds of behavioural data. This instrument measures six. An earlier version also asked when you shop and how long you deliberate, and those questions were dropped. They carried the least weight and separated people least — the shorter instrument correlates with the longer one at 0.998 — but time of day is a documented pricing input and this tool no longer captures it.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Adults and households are different units.</strong> A representative survey of US adults puts the median score at 53, which this model prices at about $1,897 — a little above the $1,848 figure the model uses for an average household. The two are not expected to match. A household holds several adults with different scores, and the baseline is a household figure. The gap is about 2.6% and is disclosed rather than tuned away.</p>'+
-   (BP ? '<p class="sub"><strong style="color:var(--ink)">Where you sit among adults is an estimate, not a count.</strong> The line under your score compares you with the same survey of '+BM.n.toLocaleString()+' US adults. The answer percentages behind it were measured. The distribution of <em>scores</em> was not, because respondent-level records were not available, so it is reconstructed from those percentages and the relationships between them. That is why the figure is rounded to the nearest five rather than quoted exactly. Real adults occupy a narrow stretch of this scale. The 5th percentile scores '+BP.p5+' and the 95th scores '+BP.p95+', so almost everyone lands in the middle of a 0 to 100 axis.</p>' : '')+
+   (BP ? '<p class="sub"><strong style="color:var(--ink)">Where you sit among adults is an estimate, not a count.</strong> The line under your score compares you with the same survey of '+BM.n.toLocaleString()+' US adults. The answer percentages behind it were measured. The distribution of <em>scores</em> was not, because respondent-level records were not available, so it is reconstructed from those percentages and the relationships between them. That is why the figure is rounded to the nearest five rather than quoted exactly. Real adults occupy a narrow stretch of this scale. The 5th percentile scores '+BP.p5+' and the 95th scores '+BP.p95+', so almost everyone lands in the middle of a 0 to 100 axis.</p>'+'<p class="sub"><strong style="color:var(--ink)">The band is relative to those adults.</strong> The five bands are cut at the 10th, 30th, 70th and 90th percentiles of that distribution, so they hold 10%, 20%, 40%, 20% and 10% of adults by construction. Cut at even twentieths of the axis instead, the top and bottom bands held nobody at all and two thirds of adults shared one label. A band here therefore says where you stand among people, not how legible you are in absolute terms.</p>' : '')+
    '<p class="sub"><strong style="color:var(--ink)">Spend scaling is dampened.</strong> Income and household size are combined as (income × size)<sup>0.85</sup>, clamped to 0.55–2.0, rather than multiplied straight through. A high-income five-person household does not spend 2.3× the average consumer unit in these categories. The exponent is a judgement, not a fitted parameter, and is the least evidenced number in the model.</p>'+
    '<p class="sub" style="margin-bottom:0"><strong style="color:var(--ink)">Known limits.</strong> The model excludes mortgage, auto loans, debt repayment, insurance and healthcare. Coverage figures are estimates. It is calibrated to a $2,000/household target and reaches 92.4% of it. Spend scaling uses one global factor, though grocery spending tracks household size and airfare tracks income differently. Patent counts for 2024–25 are undercounted because applications publish about 18 months after filing.</p></div>';
   h+='<div class="nav"><button class="link" id="restart">Start over</button><button class="act primary big" id="tofb">Give feedback on this prototype</button></div>';

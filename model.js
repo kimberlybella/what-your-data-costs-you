@@ -49,11 +49,21 @@ window.MODEL = {
     medianScore: 53,
     medianCost: 1897,
     defendedFloorCost: 1600,   /* hardest-to-read 5% still pay about this */
-    bands: [ { label: "Hard to read",             range: "0-20",   share: 0.000 },
-             { label: "Harder to read than most", range: "21-40",  share: 0.077 },
-             { label: "Typical",                  range: "41-60",  share: 0.672 },
-             { label: "Easy to read",             range: "61-80",  share: 0.201 },
-             { label: "An open book",             range: "81-100", share: 0.000 } ],
+    /* Bands are cut at this survey's percentiles, not at twentieths of the
+       axis. Cut evenly, the two outer bands held 0.0% of adults each and
+       67.2% fell in "Typical", so most people were told the same thing and
+       two labels were unreachable.
+
+       Edges are the 10th, 30th, 70th and 90th percentiles, so the shares
+       below are by construction rather than independently measured. Moving
+       an edge here moves both the label a respondent sees and the published
+       distribution, because index.html reads its band names from this table
+       and from nowhere else. Keep the ranges contiguous and ascending. */
+    bands: [ { label: "Hard to read",             range: "0-41",   share: 0.10 },
+             { label: "Harder to read than most", range: "42-48",  share: 0.20 },
+             { label: "Typical",                  range: "49-58",  share: 0.40 },
+             { label: "Easy to read",             range: "59-65",  share: 0.20 },
+             { label: "An open book",             range: "66-100", share: 0.10 } ],
     percentiles: { p5: 38, p10: 41, p25: 47, p50: 53, p75: 60, p90: 65, p95: 68 },
   },
 
