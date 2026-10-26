@@ -86,7 +86,7 @@ Updates are: edit, commit, push. Vercel redeploys automatically.
 
 ### Before the first public deploy
 
-- Replace `REPLACE_WITH_DOMAIN` in the `og:url` meta tag in `index.html`.
+- ~~Replace `REPLACE_WITH_DOMAIN` in `index.html`.~~ Done. The canonical URL and `og:url` are both `https://www.whatyourdatacostsyou.com/`. If the domain ever changes, those two lines in the `<head>` are the ones to edit.
 - Add the fonts (see `fonts/README.txt`) — optional; the page falls back to Georgia and the system stacks and still reads correctly without them.
 - Decide on analytics. **If you add any, change the privacy copy the same day** — the page currently states it runs none, and a room of data scientists will check.
 
@@ -98,7 +98,7 @@ In the `plain-inference` repo's `next.config.mjs`:
 async redirects() {
   return [
     { source: "/what-your-data-costs-you",
-      destination: "https://YOUR-NEW-DOMAIN/",
+      destination: "https://www.whatyourdatacostsyou.com/",
       permanent: false },
   ];
 }
