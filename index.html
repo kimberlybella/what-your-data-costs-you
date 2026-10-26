@@ -178,7 +178,8 @@ button.gl:focus-visible{outline:2px solid var(--accent);outline-offset:2px;borde
 .scalebar .you{position:absolute;top:-6px;width:3px;height:21px;background:var(--ink);border-radius:2px;transform:translateX(-50%)}
 .scalebar .base{position:absolute;top:-4px;width:0;height:17px;border-left:1.5px dashed var(--ref);transform:translateX(-50%)}
 .scalebar .youlab{position:absolute;bottom:calc(100% + 11px);transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
-.scalelabs{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.scalelabs{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.scalelabs span{white-space:nowrap}
 .dims{display:flex;flex-direction:column;gap:7px;margin-top:22px}
 .drow{display:grid;grid-template-columns:186px 1fr 40px;gap:13px;align-items:center}
 .drow .dl{font-size:13px;color:var(--ink-2);text-align:right;line-height:1.25}
@@ -234,6 +235,21 @@ table.mth{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 table.mth th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0 10px 7px 0;border-bottom:1px solid var(--rule)}
 table.mth td{padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
 table.mth td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+/* The scale labels are the widest fixed run of text on the page, and the
+   panel's own padding leaves less room than the viewport suggests. Below
+   these widths they no longer fit on one line, so the middle label sheds a
+   word and then goes entirely. Without this each label wraps mid-phrase and
+   the three of them stop reading as a single axis. */
+@media(max-width:520px){
+  .scalelabs{font-size:9.5px}
+  .scalelabs .lw{display:none}
+}
+/* The results hero directly above already says "average US household in this
+   model · 50", and the dashed tick on the bar stays, so dropping the middle
+   label here costs nothing. */
+@media(max-width:400px){
+  .scalelabs .mid{display:none}
+}
 @media(max-width:620px){
   h1{font-size:33px}.qtext{font-size:24px}
   .drow{grid-template-columns:114px 1fr 34px;gap:9px}.drow .dl{font-size:11.5px}
@@ -443,7 +459,7 @@ function vScore(){
 
   h+='<div class="panel" style="margin-top:18px"><h2>What the score is made of</h2><p class="sub">'+dCount()+' categories of behavioral data, weighted by how heavily each is used to infer price sensitivity. Sorted by where you are easiest to read.</p>'+
    '<div class="scalebar"><span class="base" style="left:50%"></span><span class="youlab" style="left:'+Math.min(Math.max(sc,3),97)+'%">You</span><span class="you" style="left:'+sc+'%"></span></div>'+
-   '<div class="scalelabs"><span>0 · hard to read</span><span>50 · average household</span><span>100 · easy to read</span></div>';
+   '<div class="scalelabs"><span>0 · hard to read</span><span class="mid">50 · average<span class="lw"> household</span></span><span>100 · easy to read</span></div>';
   var sorted=Object.keys(DIM).map(function(k){return {k:k,v:ds[k]}}).sort(function(a,b){return b.v-a.v});
   h+='<div class="dims">';
   sorted.forEach(function(d){
