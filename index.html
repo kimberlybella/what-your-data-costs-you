@@ -236,6 +236,24 @@ table.mth{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 table.mth th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0 10px 7px 0;border-bottom:1px solid var(--rule)}
 table.mth td{padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
 table.mth td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+/* The term column is nowrap so a name never breaks mid-word, which pins the
+   table at the width of its longest term. "dynamic-pricing coverage" is wide
+   enough to push the whole table past the panel and give the page a sideways
+   scroll on a phone. Below this width the three-column table becomes a stack
+   of blocks, which also stops the explanation column wrapping to one word a
+   line. Only the three-column table is restacked; the two-column one reads
+   correctly as label and value side by side. */
+@media(max-width:620px){
+  table.mth.terms, table.mth.terms tbody, table.mth.terms tr, table.mth.terms td{display:block;width:auto}
+  table.mth.terms thead{display:none}
+  table.mth.terms tr{border-bottom:1px solid var(--rule);padding:11px 0}
+  table.mth.terms tr:last-child{border-bottom:0}
+  table.mth.terms td{border-bottom:0;padding:0 0 5px}
+  table.mth.terms td:first-child{white-space:normal;font-size:13.5px}
+  table.mth.terms td:nth-child(2){font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  table.mth.terms td:nth-child(2)::before{content:"personalized? "}
+  table.mth td{word-break:break-word}
+}
 /* The scale labels are the widest fixed run of text on the page, and the
    panel's own padding leaves less room than the viewport suggests. Below
    these widths they no longer fit on one line, so the middle label sheds a
@@ -635,7 +653,7 @@ function vMethod(){
   h+='<div class="panel"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">The model</h3>'+
    '<p class="sub">In plain terms, the model takes what a household like yours spends on something, the share of that spending where the price moves rather than sitting on a shelf tag, and how much your own behaviour moves the price you personally get shown. Multiply those three and you have the extra cost for that category. Add the categories together and you have the figure.</p>'+'<p class="sub">For each of ten spending categories, split into online and in-store channels:</p>'+
    '<p style="font-family:var(--mono);font-size:13px;background:var(--surface-inset);padding:13px 15px;border-radius:8px;margin-bottom:14px">impact = channel spend × dynamic-pricing coverage × price impact</p>'+
-   '<table class="mth"><thead><tr><th>Term</th><th>Personalized?</th><th>Why</th></tr></thead><tbody>'+
+   '<table class="mth terms"><thead><tr><th>Term</th><th>Personalized?</th><th>Why</th></tr></thead><tbody>'+
    '<tr><td>channel spend</td><td>Yes</td><td>Household size, income band, and your online-mix answers. A fact about you.</td></tr>'+
    '<tr><td>dynamic-pricing coverage</td><td><strong>No</strong></td><td>Held at published model values. A fact about the market, not about you — personalizing it would be the tool inventing data.</td></tr>'+
    '<tr><td>price impact</td><td>Yes</td><td>Multiplied by your willingness-to-pay score. This is the term your behavior actually moves.</td></tr>'+
