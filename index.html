@@ -565,7 +565,7 @@ function vCost(){
      '<div class="hv">'+money(c.lo)+' – '+money(c.hi)+'</div>'+
      '<p class="hs">of being priced as you, rather than as an anonymous shopper</p>'+
      '<div class="hc">average US household in this model · '+money(BASELINE)+'</div></div>';
-  h+='<div class="caveat"><span class="ic">NOTE</span><div><strong>This is an estimate, not a bill.</strong> It is a published model applied to your answers. The range reflects uncertainty in the model’s assumptions — it is not a statistical confidence interval, and the tool would be lying if it presented one.</div></div>';
+  h+='<div class="caveat"><span class="ic">NOTE</span><div><strong>This is an estimate, not a bill.</strong> It is a published model applied to your answers. The range covers the uncertainty in fitting a published model to what you told us. It is not a statistical confidence interval, and the tool would be lying if it presented one. Uncertainty in the model itself is larger, and is set out on the methodology page rather than folded in here.</div></div>';
 
   var mx=Math.max.apply(null,r.rows.map(function(x){return x.v}));
   var srt=r.rows.slice().sort(function(a,b){return b.v-a.v});
@@ -586,11 +586,25 @@ function vCeiling(){
     caps[k]=caps[k]==null?c.caps[k]:Math.min(caps[k],c.caps[k]); }); });
   var ds1=dimScores(caps),sc1=composite(ds1),r1=catRows(multiplier(sc1));
   var saved=r0.total-r1.total, pct=r0.total?Math.round(saved/r0.total*100):0;
+
+  /* pct above follows the toggles, which is right for the live widget and wrong
+     for the paragraph underneath it. That paragraph describes what all four
+     strategies reach, so on arrival, with nothing switched on, it used to read
+     "Together they recover 0%". These are the all-on figures, and they do not
+     move when a toggle moves. The ceiling is not a constant either: it runs
+     from about 9% for an already-defended shopper to about 37% for a very
+     legible one, so it has to be computed rather than written down. */
+  var allCaps={};
+  CEIL.forEach(function(c){ Object.keys(c.caps).forEach(function(k){
+    allCaps[k]=allCaps[k]==null?c.caps[k]:Math.min(allCaps[k],c.caps[k]); }); });
+  var dsC=dimScores(allCaps), scC=composite(dsC), rC=catRows(multiplier(scC));
+  var ceilPct=r0.total?Math.round((r0.total-rC.total)/r0.total*100):0;
+  var dropPct=sc0?Math.round((sc0-scC)/sc0*100):0;
   var builder=S.reg==='builder';
   var h=regBar()+'<h2>'+(builder?'The ceiling on self-defense':'What you can actually do')+'</h2>'+
    '<p class="sub">'+(builder
-     ? 'These four strategies are real, and they are the complete set available to an individual. Turn all of them on and watch where the number stops.'
-     : 'Four things you can do, drawn from the testimony. Turn them on and see what each one is worth.')+'</p>';
+     ? NUMWORD[CEIL.length].toLowerCase()+' strategies are real, and they are the complete set available to an individual. Turn all of them on and watch where the number stops.'
+     : NUMWORD[CEIL.length]+' things you can do, drawn from the testimony. Turn them on and see what each one is worth.')+'</p>';
   h+='<div class="ceilnum"><div class="cb"><span class="ck">As you shop now</span><span class="cvv">'+money(rnd10(r0.total*(1-BAND)))+'–'+money(rnd10(r0.total*(1+BAND)))+'</span></div>'+
      '<span class="arrow">→</span>'+
      '<div class="cb"><span class="ck">With these on</span><span class="cvv">'+money(rnd10(r1.total*(1-BAND)))+'–'+money(rnd10(r1.total*(1+BAND)))+'</span></div>'+
@@ -600,12 +614,12 @@ function vCeiling(){
   });
   h+='<div class="note" style="margin-top:22px"><h3>'+(builder?'Read the number you just produced':'You should not have to do any of this')+'</h3>'+
    (builder
-    ? '<p>You have just watched a perfectly diligent consumer — signed out, patient, skeptical of loyalty programs, cookies blocked — recover <strong>'+pct+'%</strong> of what the system extracts. <strong>That is the ceiling on self-defense.</strong></p>'+
-      '<p>Your willingness-to-pay score fell from '+Math.round(sc0)+' to '+Math.round(sc1)+' — a '+Math.round((sc0-sc1)/sc0*100)+'% drop in how readable you are, which bought a '+pct+'% drop in cost. The gap is structural. Even a consumer who becomes impossible to read still pays, because most of the extraction is a property of the market they shop in, not the traces they leave.</p>'+
-      '<p>The remaining '+(100-pct)+'% is not the shopper’s to control. It is set by whoever specifies the feature store, chooses the coverage, and signs off on the experiment. That is a design decision, and at some point it will be yours.</p>'+
+    ? '<p>You have just watched a perfectly diligent consumer — signed out, patient, skeptical of loyalty programs, cookies blocked — recover <strong>'+ceilPct+'%</strong> of what the system extracts. <strong>That is the ceiling on self-defense.</strong></p>'+
+      '<p>Your willingness-to-pay score would fall from '+Math.round(sc0)+' to '+Math.round(scC)+' — a '+dropPct+'% drop in how readable you are, which buys a '+ceilPct+'% drop in cost. The gap is structural. Even a consumer who becomes impossible to read still pays, because most of the extraction is a property of the market they shop in, not the traces they leave.</p>'+
+      '<p>The remaining '+(100-ceilPct)+'% is not the shopper’s to control. It is set by whoever specifies the feature store, chooses the coverage, and signs off on the experiment. That is a design decision, and at some point it will be yours.</p>'+
       '<p>The testimony frames this as a professional question rather than a consumer one. Data science has ethical codes, but none tied to licensure, none enforceable against an individual practitioner, and no board that can bar anyone from practice. <strong>The only meaningful guardrails are the conscience of the data scientists and business executives who build these systems.</strong></p>'
-    : '<p>Every strategy above is real, and every one of them is tedious. Together they recover <strong>'+pct+'%</strong> — and no individual can fully opt out.</p>'+
-      '<p><strong>Consumer self-defense is necessary but insufficient.</strong> The fix is requiring informed consent before behavior can be used to price a person — which would return the whole amount rather than a third of it.</p>'+
+    : '<p>Every strategy above is real, and every one of them is tedious. Together they recover <strong>'+ceilPct+'%</strong> of what the system extracts from you — and no individual can fully opt out.</p>'+
+      '<p><strong>Consumer self-defense is necessary but insufficient.</strong> The fix is requiring informed consent before behavior can be used to price a person, which would return the whole amount rather than the '+ceilPct+'% these '+NUMWORD[CEIL.length].toLowerCase()+' strategies reach.</p>'+
       '<p>As of 1 August 2026, three states have formal regulations on surveillance pricing and 24 have legislation proposed. More than 40 bills have been introduced across at least 24 states this year, and three federal bills are live.</p>')+
    '</div>';
   h+='<div class="nav"><span class="row" style="gap:14px"><button class="link" id="back">Back to results</button><button class="link" id="tofb">Give feedback</button></span><button class="act" id="tometh">How this was calculated</button></div>';
@@ -616,31 +630,31 @@ function vMethod(){
   var ds=dimScores(),sc=composite(ds),mult=multiplier(sc);
   var BM=(typeof M!=='undefined'&&M.benchmark)?M.benchmark:null;
   var BP=(BM&&BM.percentiles)?BM.percentiles:null;
-  var h=regBar()+'<h2>How this was calculated</h2><p class="sub">The reader this page is written for is a pricing analyst at a retailer looking for the flaw.</p>';
+  var h=regBar()+'<h2>How this was calculated</h2><p class="sub">Every assumption behind the number is on this page. It is written so that a sceptical reader can find the flaw, which means it does not simplify to flatter the model. You do not need any of it to use the tool.</p>';
   h+='<div class="panel"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">The model</h3>'+
-   '<p class="sub">For each of ten spending categories, split into online and in-store channels:</p>'+
-   '<p style="font-family:var(--mono);font-size:13px;background:var(--surface-inset);padding:13px 15px;border-radius:8px;margin-bottom:14px">impact = channel spend × DP coverage × price impact</p>'+
+   '<p class="sub">In plain terms, the model takes what a household like yours spends on something, the share of that spending where the price moves rather than sitting on a shelf tag, and how much your own behaviour moves the price you personally get shown. Multiply those three and you have the extra cost for that category. Add the categories together and you have the figure.</p>'+'<p class="sub">For each of ten spending categories, split into online and in-store channels:</p>'+
+   '<p style="font-family:var(--mono);font-size:13px;background:var(--surface-inset);padding:13px 15px;border-radius:8px;margin-bottom:14px">impact = channel spend × dynamic-pricing coverage × price impact</p>'+
    '<table class="mth"><thead><tr><th>Term</th><th>Personalized?</th><th>Why</th></tr></thead><tbody>'+
    '<tr><td>channel spend</td><td>Yes</td><td>Household size, income band, and your online-mix answers. A fact about you.</td></tr>'+
-   '<tr><td>DP coverage</td><td><strong>No</strong></td><td>Held at published model values. A fact about the market, not about you — personalizing it would be the tool inventing data.</td></tr>'+
+   '<tr><td>dynamic-pricing coverage</td><td><strong>No</strong></td><td>Held at published model values. A fact about the market, not about you — personalizing it would be the tool inventing data.</td></tr>'+
    '<tr><td>price impact</td><td>Yes</td><td>Multiplied by your willingness-to-pay score. This is the term your behavior actually moves.</td></tr>'+
    '</tbody></table></div>';
   h+='<div class="panel" style="margin-top:16px"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">Your numbers</h3><table class="mth"><tbody>'+
    '<tr><td>composite score</td><td colspan="2">'+Math.round(sc)+' / 100</td></tr>'+
    '<tr><td>multiplier</td><td colspan="2">0.6 + (score ÷ 100) × 0.8 = <strong>'+mult.toFixed(3)+'×</strong></td></tr>'+
    '<tr><td>model version</td><td colspan="2">'+M.version+' · '+M.versionDate+'</td></tr>'+
-   '<tr><td>spend factor</td><td colspan="2">'+spendFactor().toFixed(2)+'× the average consumer unit (exponent '+SCALE.exponent+', clamped '+SCALE.min+'–'+SCALE.max+')</td></tr>'+
+   '<tr><td>spend factor</td><td colspan="2">'+spendFactor().toFixed(2)+'× the average household (exponent '+SCALE.exponent+', clamped '+SCALE.min+'–'+SCALE.max+')</td></tr>'+
    '<tr><td>displayed band</td><td colspan="2">point estimate ±'+Math.round(BAND*100)+'%, reflecting residual uncertainty in the personalization step</td></tr>'+
    '</tbody></table></div>';
   h+='<div class="panel" style="margin-top:16px"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">Calibration and limits</h3>'+
    '<p class="sub">A composite of <strong style="color:var(--ink)">50 reproduces the published baseline exactly</strong> — $1,848 per household per year. The model describes the average household, so average behavior returns the average outcome. The score does not invent a figure; it moves you around a published one.</p>'+
-   '<p class="sub">The multiplier runs 0.6× to 1.4×, producing a blended extraction rate of 2.3% to 5.4% across all modeled spend. The testimony adopts 3–12% as its own conservative envelope and cites published research finding 5–20% by category. Nothing here exceeds what that analysis already defends.</p>'+
+   '<p class="sub">The multiplier runs 0.6× to 1.4×, which works out to between 2.3% and 5.4% of everything the model counts as household spending. The testimony adopts 3–12% as its own conservative envelope and cites published research finding 5–20% by category. Nothing here exceeds what that analysis already defends.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">What the band does and does not mean.</strong> The ±'+Math.round(BAND*100)+'% shown around the figure covers uncertainty added by fitting the model to your answers. It does <em>not</em> restate the uncertainty in the underlying model — that is disclosed here instead, and it is larger. A wider band would double-count it in the headline number; it would not make the estimate more accurate.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Six categories, not seven.</strong> The testimony describes seven kinds of behavioural data. This instrument measures six. An earlier version also asked when you shop and how long you deliberate, and those questions were dropped. They carried the least weight and separated people least — the shorter instrument correlates with the longer one at 0.998 — but time of day is a documented pricing input and this tool no longer captures it.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Adults and households are different units.</strong> A representative survey of US adults puts the median score at 53, which this model prices at about $1,897 — a little above the $1,848 figure the model uses for an average household. The two are not expected to match. A household holds several adults with different scores, and the baseline is a household figure. The gap is about 2.6% and is disclosed rather than tuned away.</p>'+
-   (BP ? '<p class="sub"><strong style="color:var(--ink)">Where you sit among adults is an estimate, not a count.</strong> The line under your score compares you with the same survey of '+BM.n.toLocaleString()+' US adults. The answer percentages behind it were measured. The distribution of <em>scores</em> was not, because respondent-level records were not available, so it is reconstructed from those percentages and the relationships between them. That is why the figure is rounded to the nearest five rather than quoted exactly. Real adults occupy a narrow stretch of this scale. The 5th percentile scores '+BP.p5+' and the 95th scores '+BP.p95+', so almost everyone lands in the middle of a 0 to 100 axis.</p>'+'<p class="sub"><strong style="color:var(--ink)">The band is relative to those adults.</strong> The five bands are cut at the 10th, 30th, 70th and 90th percentiles of that distribution, so they hold 10%, 20%, 40%, 20% and 10% of adults by construction. Cut at even twentieths of the axis instead, the top and bottom bands held nobody at all and two thirds of adults shared one label. A band here therefore says where you stand among people, not how legible you are in absolute terms.</p>' : '')+
-   '<p class="sub"><strong style="color:var(--ink)">Spend scaling is dampened.</strong> Income and household size are combined as (income × size)<sup>0.85</sup>, clamped to 0.55–2.0, rather than multiplied straight through. A high-income five-person household does not spend 2.3× the average consumer unit in these categories. The exponent is a judgement, not a fitted parameter, and is the least evidenced number in the model.</p>'+
-   '<p class="sub" style="margin-bottom:0"><strong style="color:var(--ink)">Known limits.</strong> The model excludes mortgage, auto loans, debt repayment, insurance and healthcare. Coverage figures are estimates. It is calibrated to a $2,000/household target and reaches 92.4% of it. Spend scaling uses one global factor, though grocery spending tracks household size and airfare tracks income differently. Patent counts for 2024–25 are undercounted because applications publish about 18 months after filing.</p></div>';
+   (BP ? '<p class="sub"><strong style="color:var(--ink)">Where you sit among adults is an estimate, not a count.</strong> The line under your score compares you with the same survey of '+BM.n.toLocaleString()+' US adults. The answer percentages behind it were measured. The distribution of <em>scores</em> was not, because respondent-level records were not available, so it is reconstructed from those percentages and the relationships between them. That is why the figure is rounded to the nearest five rather than quoted exactly. Real adults occupy a narrow stretch of this scale. The 5th percentile scores '+BP.p5+' and the 95th scores '+BP.p95+', so almost everyone lands in the middle of a 0 to 100 axis.</p>'+'<p class="sub"><strong style="color:var(--ink)">The band is relative to those adults.</strong> The five bands are cut at the 10th, 30th, 70th and 90th percentiles of that distribution, so they hold 10%, 20%, 40%, 20% and 10% of adults by construction. Cut at even twentieths of the axis instead, the top and bottom bands held nobody at all and two thirds of adults shared one label. A band here therefore says where you stand among people, not how readable you are in absolute terms.</p>' : '')+
+   '<p class="sub"><strong style="color:var(--ink)">Spend scaling is dampened.</strong> Income and household size are combined as (income × size)<sup>0.85</sup>, clamped to 0.55–2.0, rather than multiplied straight through. A high-income five-person household does not spend 2.3× the average household in these categories. The exponent is a judgement, not a fitted parameter, and is the least evidenced number in the model.</p>'+
+   '<p class="sub" style="margin-bottom:0"><strong style="color:var(--ink)">Known limits.</strong> The model excludes mortgage, auto loans, debt repayment, insurance and healthcare. Coverage figures are estimates. The testimony puts the figure at roughly $2,000 per household. This model builds up to $1,848 from its own categories, which is 92.4% of that, and the shortfall is left visible rather than closed by adjusting a coverage figure until it matched. Spend scaling uses one global factor, though grocery spending tracks household size and airfare tracks income differently. Patent counts for 2024–25 are undercounted because applications publish about 18 months after filing.</p></div>';
   h+='<div class="nav"><button class="link" id="restart">Start over</button><button class="act primary big" id="tofb">Give feedback</button></div>';
   return h;
 }
