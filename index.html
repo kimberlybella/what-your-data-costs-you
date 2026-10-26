@@ -165,6 +165,7 @@ button.gl:focus-visible{outline:2px solid var(--accent);outline-offset:2px;borde
 .hero .hk{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
 .hero .hv{font-family:var(--mono);font-weight:500;font-size:clamp(38px,8.5vw,64px);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
 .hero .hs{font-family:var(--serif);font-size:19px;color:var(--ink-2);margin:18px auto 0;max-width:34ch;line-height:1.4}
+.hero .hp{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);margin:10px auto 0;max-width:36ch;line-height:1.45}
 .hero .hc{font-size:13px;color:var(--ink-3);margin-top:22px;font-family:var(--mono)}
 .caveat{display:flex;gap:11px;align-items:flex-start;background:var(--ref-soft);border:1px solid var(--ref);border-radius:9px;padding:14px 17px;font-size:13.5px;color:var(--ink-2);margin-top:22px}
 .caveat strong{color:var(--ink)}
@@ -371,6 +372,42 @@ function bandName(sc){
 }
 function bandIdx(sc){sc=Math.round(sc);return sc<=20?0:sc<=40?1:sc<=60?2:sc<=80?3:4}
 
+/* Where a score sits among the surveyed adults, as a sentence.
+
+   Reads M.benchmark.percentiles and interpolates between the seven published
+   points. Returns null when there is no benchmark block, so the line simply
+   does not render rather than inventing a comparison.
+
+   Rounded to the nearest 5 on purpose. The answer percentages behind the
+   survey were measured, but the distribution of scores is reconstructed from
+   them rather than computed from respondent-level records, which were not
+   available. Reporting "about 80%" rather than "82%" keeps the precision
+   honest. The methodology page says the same thing at length. */
+function peerLine(sc){
+  var B = (typeof M!=='undefined' && M.benchmark) ? M.benchmark : null;
+  if(!B || !B.percentiles) return null;
+  var P=B.percentiles;
+  var pts=[[5,P.p5],[10,P.p10],[25,P.p25],[50,P.p50],[75,P.p75],[90,P.p90],[95,P.p95]]
+          .filter(function(x){ return typeof x[1]==='number'; });
+  if(pts.length<2) return null;
+
+  if(sc<=pts[0][1]) return 'Harder to read than more than 95% of US adults.';
+  if(sc>=pts[pts.length-1][1]) return 'Easier to read than more than 95% of US adults.';
+
+  var pct=null;
+  for(var i=0;i<pts.length-1;i++){
+    var pa=pts[i][0],va=pts[i][1],pb=pts[i+1][0],vb=pts[i+1][1];
+    if(sc>=va && sc<=vb){ pct = vb===va ? pa : pa+(sc-va)/(vb-va)*(pb-pa); break; }
+  }
+  if(pct==null) return null;
+
+  var r5=function(n){ return Math.round(n/5)*5; };
+  if(pct>=45 && pct<=55) return 'About as easy to read as the median US adult.';
+  return pct<45
+    ? 'Harder to read than about '+r5(100-pct)+'% of US adults.'
+    : 'Easier to read than about '+r5(pct)+'% of US adults.';
+}
+
 /* ---------------- RENDER ---------------- */
 function regBar(){
   return '<div class="row" style="justify-content:space-between;margin-bottom:26px">'+
@@ -454,6 +491,7 @@ function vScore(){
      '<div class="hk">Your willingness-to-pay score</div>'+
      '<div class="hv">'+Math.round(sc)+'</div>'+
      '<p class="hs">'+bandName(sc)+'</p>'+
+     (peerLine(sc) ? '<p class="hp">'+peerLine(sc)+'</p>' : '')+
      '<div class="hc">average US household in this model · 50</div></div>';
   h+='<div class="caveat" style="background:var(--accent-soft);border-color:var(--accent)"><span class="ic" style="color:var(--accent)">TERM</span><div><strong>“Willingness to pay” is their phrase, not ours.</strong> It is the standard industry term for how price-sensitive you are — a high score means a pricing system expects you to pay more without walking away. This is the kind of number that gets computed about you, sold, and acted on, without ever being shown to you.</div></div>';
 
@@ -544,6 +582,8 @@ function vCeiling(){
 
 function vMethod(){
   var ds=dimScores(),sc=composite(ds),mult=multiplier(sc);
+  var BM=(typeof M!=='undefined'&&M.benchmark)?M.benchmark:null;
+  var BP=(BM&&BM.percentiles)?BM.percentiles:null;
   var h=regBar()+'<h2>How this was calculated</h2><p class="sub">The reader this page is written for is a pricing analyst at a retailer looking for the flaw.</p>';
   h+='<div class="panel"><h3 style="font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px">The model</h3>'+
    '<p class="sub">For each of ten spending categories, split into online and in-store channels:</p>'+
@@ -566,6 +606,7 @@ function vMethod(){
    '<p class="sub"><strong style="color:var(--ink)">What the band does and does not mean.</strong> The ±'+Math.round(BAND*100)+'% shown around the figure covers uncertainty added by fitting the model to your answers. It does <em>not</em> restate the uncertainty in the underlying model — that is disclosed here instead, and it is larger. A wider band would double-count it in the headline number; it would not make the estimate more accurate.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Six categories, not seven.</strong> The testimony describes seven kinds of behavioural data. This instrument measures six. An earlier version also asked when you shop and how long you deliberate, and those questions were dropped. They carried the least weight and separated people least — the shorter instrument correlates with the longer one at 0.998 — but time of day is a documented pricing input and this tool no longer captures it.</p>'+
    '<p class="sub"><strong style="color:var(--ink)">Adults and households are different units.</strong> A representative survey of US adults puts the median score at 53, which this model prices at about $1,897 — a little above the $1,848 figure the model uses for an average household. The two are not expected to match. A household holds several adults with different scores, and the baseline is a household figure. The gap is about 2.6% and is disclosed rather than tuned away.</p>'+
+   (BP ? '<p class="sub"><strong style="color:var(--ink)">Where you sit among adults is an estimate, not a count.</strong> The line under your score compares you with the same survey of '+BM.n.toLocaleString()+' US adults. The answer percentages behind it were measured. The distribution of <em>scores</em> was not, because respondent-level records were not available, so it is reconstructed from those percentages and the relationships between them. That is why the figure is rounded to the nearest five rather than quoted exactly. Real adults occupy a narrow stretch of this scale. The 5th percentile scores '+BP.p5+' and the 95th scores '+BP.p95+', so almost everyone lands in the middle of a 0 to 100 axis.</p>' : '')+
    '<p class="sub"><strong style="color:var(--ink)">Spend scaling is dampened.</strong> Income and household size are combined as (income × size)<sup>0.85</sup>, clamped to 0.55–2.0, rather than multiplied straight through. A high-income five-person household does not spend 2.3× the average consumer unit in these categories. The exponent is a judgement, not a fitted parameter, and is the least evidenced number in the model.</p>'+
    '<p class="sub" style="margin-bottom:0"><strong style="color:var(--ink)">Known limits.</strong> The model excludes mortgage, auto loans, debt repayment, insurance and healthcare. Coverage figures are estimates. It is calibrated to a $2,000/household target and reaches 92.4% of it. Spend scaling uses one global factor, though grocery spending tracks household size and airfare tracks income differently. Patent counts for 2024–25 are undercounted because applications publish about 18 months after filing.</p></div>';
   h+='<div class="nav"><button class="link" id="restart">Start over</button><button class="act primary big" id="tofb">Give feedback on this prototype</button></div>';
