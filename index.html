@@ -166,6 +166,7 @@ button.gl:focus-visible{outline:2px solid var(--accent);outline-offset:2px;borde
 .hero .hv{font-family:var(--mono);font-weight:500;font-size:clamp(38px,8.5vw,64px);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
 .hero .hs{font-family:var(--serif);font-size:19px;color:var(--ink-2);margin:18px auto 0;max-width:34ch;line-height:1.4}
 .hero .hp{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);margin:10px auto 0;max-width:36ch;line-height:1.45}
+.hero .hattr{font-family:var(--sans);font-size:12.5px;color:var(--ink-3);margin:7px auto 0;max-width:46ch;line-height:1.4}
 .hero .hc{font-size:13px;color:var(--ink-3);margin-top:22px;font-family:var(--mono)}
 .caveat{display:flex;gap:11px;align-items:flex-start;background:var(--ref-soft);border:1px solid var(--ref);border-radius:9px;padding:14px 17px;font-size:13.5px;color:var(--ink-2);margin-top:22px}
 .caveat strong{color:var(--ink)}
@@ -543,6 +544,8 @@ function vScore(){
      '<div class="hv">'+Math.round(sc)+'</div>'+
      '<p class="hs">'+bandName(sc)+'</p>'+
      (peerLine(sc) ? '<p class="hp">'+peerLine(sc)+'</p>' : '')+
+     ((peerLine(sc) && M.benchmark && M.benchmark.attribution)
+        ? '<p class="hattr">'+M.benchmark.attribution+'</p>' : '')+
      '<div class="hc">average US household in this model · 50</div></div>';
   h+='<div class="caveat" style="background:var(--accent-soft);border-color:var(--accent)"><span class="ic" style="color:var(--accent)">TERM</span><div><strong>“Willingness to pay” is their phrase, not ours.</strong> It is the standard industry term for how price-sensitive you are — a high score means a pricing system expects you to pay more without walking away. This is the kind of number that gets computed about you, sold, and acted on, without ever being shown to you.</div></div>';
 

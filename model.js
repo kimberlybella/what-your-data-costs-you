@@ -43,6 +43,9 @@ window.MODEL = {
    * keep that distinction visible. */
   benchmark: {
     source: "Grow Progress pulse survey",
+    /* Shown under the comparison sentence on the results screen. It credits the
+       benchmark, so it lives in the benchmark block and disappears with it. */
+    attribution: "Benchmarking study of US consumers developed in partnership with Groundwork Collaborative",
     n: 991,
     fielded: "October 19-20, 2026",
     note: "US adults, weighted to the general adult population; +/-3 pts at 90% confidence",
