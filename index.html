@@ -489,12 +489,12 @@ function vLanding(){
   '<p class="lede">'+(builder
     ? qCount()+' questions about how you shop, then an estimate of what being priced as <em>you</em>, rather than as an anonymous shopper, costs you in a year. You are about to be on the receiving end of the kind of model you will be asked to build.'
     : qCount()+' questions about how you shop, then an estimate of what being priced as <em>you</em>, rather than as an anonymous shopper, costs you in a year.')+'</p>'+
-  '<div class="priv"><span class="ic">PRIVACY</span><div>This page sets <strong>no cookies</strong>, runs <strong>no analytics</strong>, and asks for <strong>no email address</strong>. Your answers never leave your browser — the whole calculation runs on your device, and we never see your score. The server that sends you this page logs the request, as every website does. It learns that someone loaded a page, never anything you answered. (There is an optional feedback form at the very end. It is the only thing here that sends anything.)</div></div>'+
+  '<div class="priv"><span class="ic">PRIVACY</span><div>This page sets <strong>no cookies</strong>, <strong>does not track you</strong>, and asks for <strong>no email address</strong>. Your answers never leave your browser — the whole calculation runs on your device, and we never see your score. Visits are counted, without cookies and without storing an IP address. A visitor is recognised by a hash of the request that is thrown away every 24 hours, so nobody can follow you from one day to the next, or onto any other site. What gets counted is that a page was loaded, roughly where from, and which browser. Never anything you answered. (There is an optional feedback form at the very end. It is the only thing here that sends anything.)</div></div>'+
   '<div class="panel"><h2>How it works</h2>'+
   '<p class="sub" style="margin-bottom:14px">Your answers are scored across the six categories of behavioral data that pricing systems use to infer [[willingness to pay]]. That score adjusts a published model of [[surveillance pricing]] across ten categories of household spending — a model whose baseline is <strong style="color:var(--ink)">$1,848 per household per year</strong>.</p>'+
   '<p class="sub" style="margin-bottom:0">Every figure it returns is a range. The model supports an estimate, not a bill.</p></div>'+
   '<div class="nav"><span></span><button class="act primary big" id="go">Start — '+Q.length+' questions, about '+qMinutes()+' minutes</button></div>'+
-  '<p class="foot">Built on the model and evidence in written testimony to the Senate Judiciary Committee, Subcommittee on Crime and Counterterrorism, 4 August 2026. All patents and cases cited are real and are named in that testimony. Comparisons with other adults come from a representative survey of 991 US adults, fielded in October 2026. This page sets no cookies and runs no analytics.</p>';
+  '<p class="foot">Built on the model and evidence in written testimony to the Senate Judiciary Committee, Subcommittee on Crime and Counterterrorism, 4 August 2026. All patents and cases cited are real and are named in that testimony. Comparisons with other adults come from a representative survey of 991 US adults, fielded in October 2026. This page sets no cookies and does not track you.</p>';
 }
 
 function vQuestion(){
@@ -852,5 +852,15 @@ render();
 
 })();
 </script>
+<!-- Visit counting. Vercel Web Analytics, served from this domain rather than
+     a third party, so no request leaves the origin. It sets no cookies and
+     identifies a visitor by a hash of the request that is discarded every 24
+     hours, which is why the privacy note says the page does not track you.
+     It never sees an answer; the assessment runs entirely in the browser and
+     the URL never changes as someone moves through it.
+     The CSP in vercel.json needs connect-src 'self' for the beacon to send.
+     With connect-src 'none' it fails silently and records nothing. -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
